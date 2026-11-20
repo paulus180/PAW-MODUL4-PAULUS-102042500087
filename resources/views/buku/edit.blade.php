@@ -15,8 +15,7 @@
 
         <div class="card shadow-sm">
             <div class="card-body p-4">
-                {{-- TODO 8: Tambahkan atribut enctype="multipart/form-data" pada form di bawah ini --}}
-                <form action="{{ route('buku.update', $buku->id) }}" method="POST">
+                <form action="{{ route('buku.update', $buku->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -64,7 +63,23 @@
                         </div>
                     </div>
 
-                    {{-- TODO 8: Tampilkan gambar sampul saat ini ($buku->cover) dan sediakan input file untuk mengganti sampul --}}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Sampul Buku Saat Ini</label>
+                        <div class="mb-2">
+                            @if($buku->cover)
+                                <img src="{{ asset('storage/' . $buku->cover) }}" alt="Cover {{ $buku->judul }}" class="img-thumbnail" style="max-width: 200px;">
+                            @else
+                                <p class="text-muted small">Belum ada sampul buku.</p>
+                            @endif
+                        </div>
+
+                        <label for="cover" class="form-label fw-semibold">Ganti Sampul Buku</label>
+                        <input type="file" class="form-control @error('cover') is-invalid @enderror" id="cover" name="cover" accept=".jpg,.jpeg,.png,image/jpeg,image/png">
+                        <small class="text-muted">Format JPG, JPEG, atau PNG. Maksimal ukuran 2 MB. Kosongkan jika tidak ingin mengganti sampul.</small>
+                        @error('cover')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
                     <div class="d-flex justify-content-end gap-2">
                         <a href="{{ route('buku.index') }}" class="btn btn-light border px-4">Batal</a>
@@ -78,4 +93,3 @@
     </div>
 </div>
 @endsection
-
